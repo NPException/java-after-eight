@@ -13,7 +13,7 @@ public class Main {
 	// text similarities: https://medium.com/@adriensieg/text-similarities-da019229c894
 	// Stanford CoreNLP: https://github.com/stanfordnlp/CoreNLP
 
-	public static final Path ARTICLE_FOLDER = Paths.get("/home/nipa/code/nipafx.org/blog-import/output");
+	public static final Path ARTICLE_FOLDER = Paths.get("./articles/");
 
 	public static void main(String[] args) throws IOException {
 		Files.list(ARTICLE_FOLDER)
