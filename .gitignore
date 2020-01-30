@@ -16,6 +16,9 @@ local.properties
 .classpath
 *.launch
 
+# Clojure
+/.nrepl-port
+
 # JetBrains
 
 .idea/
@@ -36,12 +39,13 @@ build/
 # Maven
 
 target/
+jars/
 
 # JVM crash logs
 # see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 
-articles/
+# Project
 
-# Clojure
-/.nrepl-port
+articles/
+recommendations.json
