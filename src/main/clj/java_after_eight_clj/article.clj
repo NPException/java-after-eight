@@ -49,7 +49,8 @@
     (->> raw-tags
          (map string/trim)
          (filter #(not (empty? %)))
-         (mapv create-tag))))
+         (map create-tag)
+         set)))
 
 
 ;; below here -> .article.Article
