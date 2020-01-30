@@ -4,8 +4,9 @@
 (defproject java-after-eight-clj "0.1.0-SNAPSHOT"
   :dependencies [[org.clojure/clojure "1.10.1"]]
   :source-paths      ["src/main/clj"]
-  :java-source-paths ["src/main/java"]
-  :test-paths ["src/test/java" "src/test/clj"]
+  :java-source-paths ["genealogy/src/main/java" "genealogists/src/main/java"]
+  :resource-paths ["genealogists/src/main/resources"]
+  :test-paths ["genealogy/src/test/java" "src/test/clj"]
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}
              :dev {:dependencies [[org.junit.jupiter/junit-jupiter-api ~junit-jupiter-version]
