@@ -13,8 +13,8 @@
   if x is empty. Else returns x."
   [x & [msg]]
   `(if (empty? ~x)
-    (throw (ex-info (or ~msg "Expression return an empty sequence") {:empty-expression '~x}))
-    ~x))
+     (throw (ex-info (or ~msg "Expression return an empty sequence") {:empty-expression '~x}))
+     ~x))
 
 
 (defn print-ex
