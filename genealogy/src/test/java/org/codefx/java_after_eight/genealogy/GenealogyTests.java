@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Stream;
 
 import static java.lang.Math.round;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -89,12 +88,12 @@ class GenealogyTests {
 
 	@Test
 	void oneGenealogist_twoArticles() {
-		Genealogy genealogy = new Genealogy(
+		var genealogy = new Genealogy(
 				List.of(articleA, articleB),
 				List.of(tagGenealogist),
 				weights);
 
-		Stream<Relation> relations = genealogy.inferRelations();
+		var relations = genealogy.inferRelations();
 
 		assertThat(relations).containsExactlyInAnyOrder(
 				new Relation(articleA, articleB, round(TAG_SCORE_A_B * TAG_WEIGHT)),
@@ -104,12 +103,12 @@ class GenealogyTests {
 
 	@Test
 	void otherGenealogist_twoArticles() {
-		Genealogy genealogy = new Genealogy(
+		var genealogy = new Genealogy(
 				List.of(articleA, articleB),
 				List.of(linkGenealogist),
 				weights);
 
-		Stream<Relation> relations = genealogy.inferRelations();
+		var relations = genealogy.inferRelations();
 
 		assertThat(relations).containsExactlyInAnyOrder(
 				new Relation(articleA, articleB, round(LINK_SCORE_A_B * LINK_WEIGHT)),
@@ -119,12 +118,12 @@ class GenealogyTests {
 
 	@Test
 	void oneGenealogist_threeArticles() {
-		Genealogy genealogy = new Genealogy(
+		var genealogy = new Genealogy(
 				List.of(articleA, articleB, articleC),
 				List.of(tagGenealogist),
 				weights);
 
-		Stream<Relation> relations = genealogy.inferRelations();
+		var relations = genealogy.inferRelations();
 
 		assertThat(relations).containsExactlyInAnyOrder(
 				new Relation(articleA, articleB, round(TAG_SCORE_A_B * TAG_WEIGHT)),
@@ -138,12 +137,12 @@ class GenealogyTests {
 
 	@Test
 	void twoGenealogists_threeArticles() {
-		Genealogy genealogy = new Genealogy(
+		var genealogy = new Genealogy(
 				List.of(articleA, articleB, articleC),
 				List.of(tagGenealogist, linkGenealogist),
 				weights);
 
-		Stream<Relation> relations = genealogy.inferRelations();
+		var relations = genealogy.inferRelations();
 
 		assertThat(relations).containsExactlyInAnyOrder(
 				new Relation(articleA, articleB, round((TAG_SCORE_A_B * TAG_WEIGHT + LINK_SCORE_A_B * LINK_WEIGHT) / 2)),

@@ -16,7 +16,7 @@ public class Title {
 
 	static Title from(String text) {
 		requireNonNull(text);
-		String unquotedText = Utils.removeOuterQuotationMarks(text);
+		var unquotedText = Utils.removeOuterQuotationMarks(text);
 		if (unquotedText.isEmpty())
 			throw new IllegalArgumentException("Titles can't have an empty text.");
 		return new Title(unquotedText);

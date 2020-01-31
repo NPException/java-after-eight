@@ -16,28 +16,28 @@ class WeightsTests {
 
 	@Test
 	void nullRelationType_throwsException() {
-		Map<RelationType, Double> weightMap = new HashMap<>();
+		var weightMap = new HashMap<RelationType, Double>();
 		weightMap.put(null, 1.0);
 		assertThatThrownBy(() -> Weights.from(weightMap, 0.5)).isInstanceOf(NullPointerException.class);
 	}
 
 	@Test
 	void nullWeight_throwsException() {
-		Map<RelationType, Double> weightMap = new HashMap<>();
+		var weightMap = new HashMap<RelationType, Double>();
 		weightMap.put(TAG_TYPE, null);
 		assertThatThrownBy(() -> Weights.from(weightMap, 0.5)).isInstanceOf(NullPointerException.class);
 	}
 
 	@Test
 	void knownRelationType_returnsWeight() {
-		Weights weights = Weights.from(Map.of(TAG_TYPE, 0.42), 0.5);
+		var weights = Weights.from(Map.of(TAG_TYPE, 0.42), 0.5);
 
 		assertThat(weights.weightOf(TAG_TYPE)).isEqualTo(0.42);
 	}
 
 	@Test
 	void unknownRelationType_returnsDefaultWeight() {
-		Weights weights = Weights.from(Map.of(TAG_TYPE, 0.42), 0.5);
+		var weights = Weights.from(Map.of(TAG_TYPE, 0.42), 0.5);
 
 		assertThat(weights.weightOf(LIST_TYPE)).isEqualTo(0.5);
 	}
