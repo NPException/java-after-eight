@@ -1,6 +1,5 @@
 (ns java-after-eight-clj.article
   (:require [java-after-eight-clj.util :refer [remove-outer-quotation-marks
-                                               read-lines-from-file
                                                assert-not-empty]]
             [clojure.string :as string])
   (:import [java.util Objects]
@@ -56,14 +55,14 @@
 ;; below here -> .article.Article
 
 (defn article
-  [title tags date description slug content]
+  [title tags date description slug content-fn]
   ;; NOTE: none of the arguments should ever be nil, so the checks may be unnecessary
   {:title       (Objects/requireNonNull title)
    :tags        (Objects/requireNonNull tags)
    :date        (Objects/requireNonNull date)
    :description (Objects/requireNonNull description)
    :slug        (Objects/requireNonNull slug)
-   :content     (Objects/requireNonNull content)})
+   :content-fn  (Objects/requireNonNull content-fn)})
 
 
 ;; below here -> .article.ArticleFactory
@@ -108,7 +107,7 @@
 ;; equivalents of ArticleFactory.createArticle(..)
 
 (defn parse-article
-  [front-matter content]
+  [front-matter content-fn]
   (let [{:keys [title tags date description slug]}
         (->> front-matter
                      (map line->key-value-pair)
@@ -119,20 +118,23 @@
       (LocalDate/parse date)
       (create-description description)
       (create-slug slug)
-      content)))
+      content-fn)))
 
 
 (defn parse-article-from-lines
   [lines]
   (parse-article
     (extract-front-matter lines)
-    (extract-content lines)))
+    #(extract-content lines)))
 
 
 (defn parse-article-from-file
   [file]
   (try
-    (parse-article-from-lines (read-lines-from-file file))
+    (let [lines-fn #(-> file slurp string/split-lines)]
+      (parse-article
+        (extract-front-matter (lines-fn))
+        (comp extract-content lines-fn)))
     (catch IOException ex
       (throw (UncheckedIOException. (str "Creating article failed: " file, ex))))
     (catch RuntimeException ex
