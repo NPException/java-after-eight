@@ -6,7 +6,6 @@ import java.util.Objects;
 
 import static java.util.Objects.requireNonNull;
 
-// REFACTOR 14: record
 public class TypedRelation {
 
 	private final Article article1;
@@ -15,17 +14,20 @@ public class TypedRelation {
 	private final long score;
 
 	private TypedRelation(Article article1, Article article2, RelationType type, long score) {
-		this.article1 = requireNonNull(article1);
-		this.article2 = requireNonNull(article2);
-		this.type = requireNonNull(type);
-		this.score = requireNonNull(score);
-
-		if (score < 0 || 100 < score)
-			throw new IllegalArgumentException("Score should be in interval [0; 100]: " + toString());
+		this.article1 = article1;
+		this.article2 = article2;
+		this.type = type;
+		this.score = score;
 	}
 
 	public static TypedRelation from(Article article1, Article article2, RelationType type, long score) {
-		return new TypedRelation(article1, article2, type, score);
+		if (score < 0 || 100 < score)
+			throw new IllegalArgumentException("Score should be in interval [0; 100]: " + score);
+		return new TypedRelation(
+				requireNonNull(article1),
+				requireNonNull(article2),
+				requireNonNull(type),
+				score);
 	}
 
 	public Article article1() {
