@@ -6,7 +6,7 @@ import org.codefx.java_after_eight.genealogy.Relation;
 import org.codefx.java_after_eight.genealogy.RelationTestHelper;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -33,7 +33,7 @@ class RecommenderTests {
 				1);
 
 		assertThat(recommendations).containsExactlyInAnyOrder(
-				new Recommendation(articleA, Arrays.asList(articleC)));
+				new Recommendation(articleA, List.of(articleC)));
 	}
 
 	@Test
@@ -43,7 +43,7 @@ class RecommenderTests {
 				1);
 
 		assertThat(recommendations).containsExactlyInAnyOrder(
-				new Recommendation(articleA, Arrays.asList(articleB)));
+				new Recommendation(articleA, List.of(articleB)));
 	}
 
 	@Test
@@ -53,9 +53,9 @@ class RecommenderTests {
 				1);
 
 		assertThat(recommendations).containsExactlyInAnyOrder(
-				new Recommendation(articleA, Arrays.asList(articleC)),
-				new Recommendation(articleB, Arrays.asList(articleC)),
-				new Recommendation(articleC, Arrays.asList(articleB))
+				new Recommendation(articleA, List.of(articleC)),
+				new Recommendation(articleB, List.of(articleC)),
+				new Recommendation(articleC, List.of(articleB))
 		);
 	}
 
@@ -66,9 +66,9 @@ class RecommenderTests {
 				1);
 
 		assertThat(recommendations).containsExactlyInAnyOrder(
-				new Recommendation(articleA, Arrays.asList(articleB)),
-				new Recommendation(articleB, Arrays.asList(articleC)),
-				new Recommendation(articleC, Arrays.asList(articleA))
+				new Recommendation(articleA, List.of(articleB)),
+				new Recommendation(articleB, List.of(articleC)),
+				new Recommendation(articleC, List.of(articleA))
 		);
 	}
 

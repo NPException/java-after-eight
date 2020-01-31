@@ -7,8 +7,7 @@ import org.codefx.java_after_eight.genealogist.RelationType;
 import org.codefx.java_after_eight.genealogist.TypedRelation;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -46,14 +45,11 @@ class GenealogyTests {
 	private final Genealogist linkGenealogist = (article1, article2) ->
 			TypedRelation.from(article1, article2, linkRelation, linkScore(article1, article2));
 
-	private final Weights weights;
-
-	GenealogyTests() {
-		Map<RelationType, Double> weights = new HashMap<>();
-		weights.put(tagRelation, TAG_WEIGHT);
-		weights.put(linkRelation, LINK_WEIGHT);
-		this.weights = Weights.from(weights, 0.5);
-	}
+	private final Weights weights = Weights.from(
+			Map.of(
+					tagRelation, TAG_WEIGHT,
+					linkRelation, LINK_WEIGHT),
+			0.5);
 
 	private int tagScore(Article article1, Article article2) {
 		if (article1 == article2)
@@ -94,8 +90,8 @@ class GenealogyTests {
 	@Test
 	void oneGenealogist_twoArticles() {
 		Genealogy genealogy = new Genealogy(
-				Arrays.asList(articleA, articleB),
-				Arrays.asList(tagGenealogist),
+				List.of(articleA, articleB),
+				List.of(tagGenealogist),
 				weights);
 
 		Stream<Relation> relations = genealogy.inferRelations();
@@ -109,8 +105,8 @@ class GenealogyTests {
 	@Test
 	void otherGenealogist_twoArticles() {
 		Genealogy genealogy = new Genealogy(
-				Arrays.asList(articleA, articleB),
-				Arrays.asList(linkGenealogist),
+				List.of(articleA, articleB),
+				List.of(linkGenealogist),
 				weights);
 
 		Stream<Relation> relations = genealogy.inferRelations();
@@ -124,8 +120,8 @@ class GenealogyTests {
 	@Test
 	void oneGenealogist_threeArticles() {
 		Genealogy genealogy = new Genealogy(
-				Arrays.asList(articleA, articleB, articleC),
-				Arrays.asList(tagGenealogist),
+				List.of(articleA, articleB, articleC),
+				List.of(tagGenealogist),
 				weights);
 
 		Stream<Relation> relations = genealogy.inferRelations();
@@ -143,8 +139,8 @@ class GenealogyTests {
 	@Test
 	void twoGenealogists_threeArticles() {
 		Genealogy genealogy = new Genealogy(
-				Arrays.asList(articleA, articleB, articleC),
-				Arrays.asList(tagGenealogist, linkGenealogist),
+				List.of(articleA, articleB, articleC),
+				List.of(tagGenealogist, linkGenealogist),
 				weights);
 
 		Stream<Relation> relations = genealogy.inferRelations();
