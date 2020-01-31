@@ -6,7 +6,7 @@ import org.codefx.java_after_eight.genealogist.RelationType;
 import org.codefx.java_after_eight.genealogist.TypedRelation;
 
 import static java.lang.Math.round;
-import static java.util.stream.Collectors.toSet;
+import static java.util.stream.Collectors.toUnmodifiableSet;
 
 public class TagGenealogist implements Genealogist {
 
@@ -14,7 +14,7 @@ public class TagGenealogist implements Genealogist {
 
 	@Override
 	public TypedRelation infer(Article article1, Article article2) {
-		var article2Tags = article2.tags().collect(toSet());
+		var article2Tags = article2.tags().collect(toUnmodifiableSet());
 		long numberOfSharedTags = article1
 				.tags()
 				.filter(article2Tags::contains)

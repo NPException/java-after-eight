@@ -1,12 +1,10 @@
 package org.codefx.java_after_eight.article;
 
-import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.toSet;
 
 public class Tag {
 
@@ -19,14 +17,12 @@ public class Tag {
 	}
 
 	static Set<Tag> from(String tagsText) {
-		var tags = Stream.of(tagsText
+		return Stream.of(tagsText
 				.replaceAll("^\\[|\\]$", "")
 				.split(","))
 				.map(String::trim)
 				.filter(tag -> !tag.isEmpty())
-				.map(Tag::new)
-				.collect(toSet());
-		return Collections.unmodifiableSet(tags);
+				.map(Tag::new).collect(java.util.stream.Collectors.toUnmodifiableSet());
 	}
 
 	public String text() {

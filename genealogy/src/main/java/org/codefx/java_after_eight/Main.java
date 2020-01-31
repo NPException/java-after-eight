@@ -16,7 +16,7 @@ import java.util.ServiceLoader;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toUnmodifiableList;
 
 public class Main {
 
@@ -41,7 +41,7 @@ public class Main {
 				.filter(Files::isRegularFile)
 				.filter(file -> file.toString().endsWith(".md"))
 				.map(ArticleFactory::createArticle)
-				.collect(toList());
+				.collect(toUnmodifiableList());
 		var genealogists = getGenealogists(articles);
 		return new Genealogy(articles, genealogists, Weights.allEqual());
 	}
@@ -51,7 +51,7 @@ public class Main {
 				.load(GenealogistService.class).stream()
 				.map(ServiceLoader.Provider::get)
 				.map(service -> service.procure(articles))
-				.collect(toList());
+				.collect(toUnmodifiableList());
 		if (genealogists.isEmpty())
 			throw new IllegalArgumentException("No genealogists found.");
 		return genealogists;
