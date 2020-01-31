@@ -8,6 +8,9 @@
   (string/replace s #"^\"|\"$" ""))
 
 
+;; Note: The only reason that this is a macro, is so that
+;;  I can see the expression that evaluated to an empty sequence.
+;;  It's mostly just a toy example to show a macro.
 (defmacro assert-not-empty
   "Throws an exception with the provided message
   if x is empty. Else returns x."
