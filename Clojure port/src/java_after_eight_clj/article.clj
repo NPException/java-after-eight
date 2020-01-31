@@ -12,6 +12,7 @@
 (defn ^:private create-title
   [text]
   (-> (util/remove-outer-quotation-marks text)
+      util/strip
       (util/assert-not-empty "Titles can't have an empty text.")))
 
 
@@ -41,7 +42,7 @@
                      (string/replace #"^\[|\]$" "")
                      (string/split #","))]
     (->> raw-tags
-         (map string/trim)
+         (map util/strip)
          (filter #(not (empty? %)))
          (map create-tag)
          set)))
@@ -51,7 +52,7 @@
 
 (defn ^:private not-front-matter-separator?
   [line]
-  (not= "---" (string/trim line)))
+  (not= "---" (util/strip line)))
 
 
 (defn ^:private skip-next-front-matter-separator
@@ -82,8 +83,8 @@
       (throw (ex-info "Line doesn't seem to be a key/value pair (no colon)." {:line line})))
     (when (string/blank? k)
       (throw (ex-info "Line has no key." {:line line})))
-    [(-> k string/trim string/lower-case keyword)
-     (string/trim v)]))
+    [(-> k util/strip string/lower-case keyword)
+     (util/strip v)]))
 
 
 ;; equivalents of ArticleFactory.createArticle(..)

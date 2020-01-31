@@ -17,6 +17,41 @@
      ~x))
 
 
+(def java-version
+  "The major java version of the running JVM.
+  Zero if it couldn't be determined."
+  (try
+    (let [version (System/getProperty "java.version")]
+      (Integer/parseInt
+        (cond
+          (string/starts-with? version "1.")
+          (-> version (subs 2 3))
+
+          (.contains version ".")
+          (-> version (string/split #"\.") first)
+
+          :else
+          version)))
+    (catch Exception _
+      0)))
+
+
+;; this is merely a proof of concept for myself, that it's
+;; possible to vary the implementation at runtime based on
+;; the available Java version. In this case for slightly
+;; better performance than clojure.string/trim.
+(declare strip)
+(if (>= java-version 11)
+  ; Use Java 11 strip for better performance if available
+  (defn strip
+    [^String s]
+    (.strip s))
+  ;; fallback to clojure's trim if we're not yet on Java 11
+  (defn strip
+    [^String s]
+    (string/trim s)))
+
+
 (defn print-ex
   "Prints an exception to *err*, with all messages and ex-info data maps in the
   cause chain. Only prints the stack trace of the root cause,
