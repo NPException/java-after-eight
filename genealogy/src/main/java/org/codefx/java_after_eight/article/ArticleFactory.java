@@ -5,9 +5,9 @@ import org.codefx.java_after_eight.Utils;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.AbstractMap;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toMap;
 
@@ -26,11 +26,11 @@ public final class ArticleFactory {
 
 	public static Article createArticle(Path file) {
 		try {
-			List<String> eagerLines = Utils.uncheckedFilesReadAllLines(file);
-			List<String> frontMatter = extractFrontMatter(eagerLines);
+			Stream<String> eagerLines = Utils.uncheckedFilesLines(file);
+			Stream<String> frontMatter = extractFrontMatter(eagerLines);
 			Content content = () -> {
-				List<String> lazyLines = Utils.uncheckedFilesReadAllLines(file);
-				return extractContent(lazyLines).stream();
+				Stream<String> lazyLines = Utils.uncheckedFilesLines(file);
+				return extractContent(lazyLines);
 			};
 			return createArticle(frontMatter, content);
 		} catch (RuntimeException ex) {
@@ -39,44 +39,28 @@ public final class ArticleFactory {
 	}
 
 	public static Article createArticle(List<String> fileLines) {
-		List<String> frontMatter = extractFrontMatter(fileLines);
-		Content content = () -> extractContent(fileLines).stream();
+		Stream<String> frontMatter = extractFrontMatter(fileLines.stream());
+		Content content = () -> extractContent(fileLines.stream());
 		return createArticle(frontMatter, content);
 	}
 
-	private static List<String> extractFrontMatter(List<String> markdownFile) {
-		List<String> frontMatter = new ArrayList<>();
-		boolean frontMatterStarted = false;
-		for (String line : markdownFile) {
-			if (line.trim().equals(FRONT_MATTER_SEPARATOR)) {
-				if (frontMatterStarted)
-					return frontMatter;
-				else
-					frontMatterStarted = true;
-			} else if (frontMatterStarted)
-				frontMatter.add(line);
-		}
-		return frontMatter;
+	private static Stream<String> extractFrontMatter(Stream<String> markdownFile) {
+		return markdownFile
+				.dropWhile(line -> !line.trim().equals(FRONT_MATTER_SEPARATOR))
+				.skip(1)
+				.takeWhile(line -> !line.trim().equals(FRONT_MATTER_SEPARATOR));
 	}
 
-	private static List<String> extractContent(List<String> markdownFile) {
-		List<String> content = new ArrayList<>();
-		boolean frontMatterStarted = false;
-		boolean contentStarted = false;
-		for (String line : markdownFile) {
-			if (line.trim().equals(FRONT_MATTER_SEPARATOR)) {
-				if (frontMatterStarted)
-					contentStarted = true;
-				else
-					frontMatterStarted = true;
-			} else if (contentStarted)
-				content.add(line);
-		}
-		return content;
+	private static Stream<String> extractContent(Stream<String> markdownFile) {
+		return markdownFile
+				.dropWhile(line -> !line.trim().equals(FRONT_MATTER_SEPARATOR))
+				.skip(1)
+				.dropWhile(line -> !line.trim().equals(FRONT_MATTER_SEPARATOR))
+				.skip(1);
 	}
 
-	public static Article createArticle(List<String> frontMatter, Content content) {
-		Map<String, String> entries = frontMatter.stream()
+	public static Article createArticle(Stream<String> frontMatter, Content content) {
+		Map<String, String> entries = frontMatter
 				.map(ArticleFactory::keyValuePairFrom)
 				.collect(toMap(Map.Entry::getKey, Map.Entry::getValue));
 		return new Article(

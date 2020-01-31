@@ -28,7 +28,7 @@ class ArticleFactoryTests {
 
 		@Test
 		void createFromFrontMatter_multipleColons_getValidArticle() {
-			List<String> frontMatter = List.of(
+			Stream<String> frontMatter = Stream.of(
 					"title: Cool: A blog post",
 					"tags: [$TAG, $TOG]",
 					"date: 2020-01-23",
@@ -47,7 +47,7 @@ class ArticleFactoryTests {
 
 		@Test
 		void createFromFrontMatter_allTagsCorrect_getValidArticle() {
-			List<String> frontMatter = List.of(
+			Stream<String> frontMatter = Stream.of(
 					"title: A cool blog post",
 					"tags: [$TAG, $TOG]",
 					"date: 2020-01-23",
