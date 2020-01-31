@@ -3,7 +3,7 @@
 
 (defproject java-after-eight-clj "0.1.0-SNAPSHOT"
   :dependencies [[org.clojure/clojure "1.10.1"]
-                 [clj-time "0.15.2"]]
+                 [clojure.java-time "0.3.2"]]
   :source-paths ["Clojure port/src"]
   :java-source-paths ["genealogy/src/main/java" "genealogists/src/main/java"]
   :resource-paths ["genealogists/src/main/resources"]

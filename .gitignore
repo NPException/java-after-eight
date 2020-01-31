@@ -18,6 +18,7 @@ local.properties
 
 # Clojure
 /.nrepl-port
+/.lein-repl-history
 
 # JetBrains
 

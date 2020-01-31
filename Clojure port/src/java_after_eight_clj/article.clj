@@ -1,6 +1,6 @@
 (ns java-after-eight-clj.article
   (:require [java-after-eight-clj.util :as util]
-            [clj-time.format :as tf]
+            [java-time :as t]
             [clojure.string :as string]))
 
 ;; Note: I will try to stay away from introducing new types, as much as possible,
@@ -96,7 +96,7 @@
              (into {}))]
     {:title       (create-title title)
      :tags        (create-tags tags)
-     :date        (tf/parse date)
+     :date        (t/local-date date)
      :description (create-description description)
      :slug        (create-slug slug)
      :content-fn  content-fn}))
