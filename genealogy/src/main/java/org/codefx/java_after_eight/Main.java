@@ -12,7 +12,6 @@ import org.codefx.java_after_eight.recommendation.Recommender;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.ServiceLoader;
@@ -51,10 +50,11 @@ public class Main {
 	}
 
 	private static Collection<Genealogist> getGenealogists(Collection<Article> articles) {
-		List<Genealogist> genealogists = new ArrayList<>();
-		ServiceLoader
-				.load(GenealogistService.class)
-				.forEach(service -> genealogists.add(service.procure(articles)));
+		List<Genealogist> genealogists = ServiceLoader
+				.load(GenealogistService.class).stream()
+				.map(ServiceLoader.Provider::get)
+				.map(service -> service.procure(articles))
+				.collect(toList());
 		if (genealogists.isEmpty())
 			throw new IllegalArgumentException("No genealogists found.");
 		return genealogists;

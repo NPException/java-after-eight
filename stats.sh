@@ -9,5 +9,5 @@ rm -f recommendations.json
 rm -rf jars/*
 mvn clean verify -q
 
-./stats-time.sh java -cp jars/genealogy.jar:jars/genealogists.jar org.codefx.java_after_eight.Main
+./stats-time.sh java -p jars -m org.codefx.java_after_eight.genealogy
 ./stats-code.sh
