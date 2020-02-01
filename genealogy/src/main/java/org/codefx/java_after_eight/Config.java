@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
@@ -19,7 +18,7 @@ public class Config {
 		if (raw.length == 0)
 			throw new IllegalArgumentException("No article path defined.");
 
-		this.articleFolder = Paths.get(raw[0]);
+		this.articleFolder = Path.of(raw[0]);
 		if (!Files.exists(articleFolder))
 			throw new IllegalArgumentException("Article path doesn't exist: " + articleFolder);
 		if (!Files.isDirectory(articleFolder))
@@ -29,7 +28,7 @@ public class Config {
 				? Optional.of(raw[1])
 				: Optional.empty();
 		this.outputFile = outputFile
-				.map(file -> Paths.get(System.getProperty("user.dir")).resolve(file));
+				.map(file -> Path.of(System.getProperty("user.dir")).resolve(file));
 		this.outputFile.ifPresent(file -> {
 			boolean notWritable = Files.exists(file) && !Files.isWritable(file);
 			if (notWritable)
@@ -57,12 +56,12 @@ public class Config {
 	}
 
 	private static CompletableFuture<String[]> readProjectConfig() {
-		Path workingDir = Paths.get(System.getProperty("user.dir")).resolve(CONFIG_FILE_NAME);
+		Path workingDir = Path.of(System.getProperty("user.dir")).resolve(CONFIG_FILE_NAME);
 		return readConfig(workingDir);
 	}
 
 	private static CompletableFuture<String[]> readUserConfig() {
-		Path workingDir = Paths.get(System.getProperty("user.home")).resolve(CONFIG_FILE_NAME);
+		Path workingDir = Path.of(System.getProperty("user.home")).resolve(CONFIG_FILE_NAME);
 		return readConfig(workingDir);
 	}
 
