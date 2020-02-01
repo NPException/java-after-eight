@@ -42,8 +42,8 @@ public record Config(Path articleFolder,Optional<Path>outputFile) {
 		CompletableFuture<String[]> rawConfig = args.length > 0
 				? CompletableFuture.completedFuture(args)
 				: readProjectConfig()
-						.exceptionally(__ -> readUserConfig().join())
-						.exceptionally(__ -> new String[0]);
+						.exceptionallyComposeAsync(__ -> readUserConfig())
+						.exceptionallyAsync(__ -> new String[0]);
 
 		return rawConfig
 				.thenApply(Config::fromRawConfig);
