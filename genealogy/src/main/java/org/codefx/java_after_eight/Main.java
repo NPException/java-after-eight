@@ -58,16 +58,21 @@ public class Main {
 	}
 
 	private static String recommendationsToJson(Stream<Recommendation> recommendations) {
-		var frame = "[\n$RECOMMENDATIONS\n]";
-		var recommendation = "" +
-				"\t{" +
-				"\n\t\t\"title\": \"$TITLE\",\n" +
-				"\t\t\"recommendations\": [\n" +
-				"$RECOMMENDED_ARTICLES\n" +
-				"\t\t]\n" +
-				"\t}";
-		var recommendedArticle = "" +
-				"\t\t\t{ \"title\": \"$TITLE\" }";
+		var frame = """
+				[
+				$RECOMMENDATIONS
+				]
+				""";
+		var recommendation = """
+					{
+						"title": "$TITLE",
+						"recommendations": [
+				$RECOMMENDED_ARTICLES
+						]
+					}
+				""";
+		var recommendedArticle = """
+				\t\t\t{ "title": "$TITLE" }""";
 
 		var recs = recommendations
 				.map(rec -> {
