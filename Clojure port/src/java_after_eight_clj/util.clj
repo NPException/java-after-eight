@@ -1,6 +1,7 @@
 (ns java-after-eight-clj.util
   (:require [clojure.string :as string]
-            [clojure.stacktrace :as st]))
+            [clojure.stacktrace :as st])
+  (:import [java.lang.management ManagementFactory]))
 
 
 (defn remove-outer-quotation-marks
@@ -53,6 +54,27 @@
   (defn strip
     [^String s]
     (string/trim s)))
+
+
+;; only use getPidFromMxBeanName
+(defn process-id
+  []
+  (try
+    (-> (ManagementFactory/getRuntimeMXBean)
+        .getName
+        (string/split #"@")
+        first
+        Long/parseLong)
+    (catch Exception _)))
+
+
+(defn process-details
+  []
+  (format "Process ID: %s | Major Java version: %s"
+          (if-let [pid (process-id)]
+            (str pid) "unknown")
+          (if (> java-version 0)
+            (str java-version) "unknown")))
 
 
 (defn print-ex
