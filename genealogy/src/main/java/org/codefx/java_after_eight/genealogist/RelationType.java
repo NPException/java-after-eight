@@ -17,7 +17,7 @@ public class RelationType {
 
 	public static RelationType from(String value) {
 		requireNonNull(value);
-		if (value.isEmpty())
+		if (value.isBlank())
 			throw new IllegalArgumentException("Relation types can't have an empty value.");
 		return new RelationType(value);
 	}

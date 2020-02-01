@@ -12,7 +12,7 @@ public class Tag {
 
 	private Tag(String text) {
 		this.text = requireNonNull(text);
-		if (text.isEmpty())
+		if (text.isBlank())
 			throw new IllegalArgumentException("Tags can't have an empty text.");
 	}
 
@@ -20,8 +20,8 @@ public class Tag {
 		return Stream.of(tagsText
 				.replaceAll("^\\[|\\]$", "")
 				.split(","))
-				.map(String::trim)
-				.filter(tag -> !tag.isEmpty())
+				.map(String::strip)
+				.filter(tag -> !tag.isBlank())
 				.map(Tag::new).collect(java.util.stream.Collectors.toUnmodifiableSet());
 	}
 

@@ -14,7 +14,7 @@ public class Slug implements Comparable<Slug> {
 
 	static Slug from(String value) {
 		requireNonNull(value);
-		if (value.isEmpty())
+		if (value.isBlank())
 			throw new IllegalArgumentException("Slugs can't have an empty value.");
 		return new Slug(value);
 	}
