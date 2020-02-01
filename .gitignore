@@ -50,5 +50,6 @@ hs_err_pid*
 # Project
 
 articles/
+cds/
 recommendations.json
 recommendations.edn
