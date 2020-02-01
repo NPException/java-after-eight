@@ -21,6 +21,15 @@
      ~x))
 
 
+(defmacro assert-not-nil
+  "Throws a NullPointer exception with the provided message
+  if x is nil. Else returns x."
+  [x & [msg]]
+  `(if (nil? ~x)
+     (throw (NullPointerException. ~msg))
+     ~x))
+
+
 (def java-version
   "The major java version of the running JVM.
   Zero if it couldn't be determined."
