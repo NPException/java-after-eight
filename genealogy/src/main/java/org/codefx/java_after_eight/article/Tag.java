@@ -5,6 +5,7 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
+import static java.util.function.Predicate.not;
 
 public class Tag {
 
@@ -21,7 +22,7 @@ public class Tag {
 				.replaceAll("^\\[|\\]$", "")
 				.split(","))
 				.map(String::strip)
-				.filter(tag -> !tag.isBlank())
+				.filter(not(String::isBlank))
 				.map(Tag::new).collect(java.util.stream.Collectors.toUnmodifiableSet());
 	}
 

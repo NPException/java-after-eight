@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import static java.util.function.Predicate.not;
 import static java.util.stream.Collectors.toMap;
 
 public final class ArticleFactory {
@@ -46,9 +47,10 @@ public final class ArticleFactory {
 
 	private static Stream<String> extractFrontMatter(Stream<String> markdownFile) {
 		return markdownFile
-				.dropWhile(line -> !line.strip().equals(FRONT_MATTER_SEPARATOR))
+				.map(String::strip)
+				.dropWhile(not(FRONT_MATTER_SEPARATOR::equals))
 				.skip(1)
-				.takeWhile(line -> !line.strip().equals(FRONT_MATTER_SEPARATOR));
+				.takeWhile(not(FRONT_MATTER_SEPARATOR::equals));
 	}
 
 	private static Stream<String> extractContent(Stream<String> markdownFile) {
