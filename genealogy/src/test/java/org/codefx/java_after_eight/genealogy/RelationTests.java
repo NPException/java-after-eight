@@ -2,12 +2,15 @@ package org.codefx.java_after_eight.genealogy;
 
 import org.codefx.java_after_eight.article.Article;
 import org.codefx.java_after_eight.article.ArticleTestHelper;
+import org.codefx.java_after_eight.genealogist.RelationType;
+import org.codefx.java_after_eight.genealogist.TypedRelation;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import static java.lang.Math.round;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class RelationTests {
@@ -70,7 +73,7 @@ class RelationTests {
 		Relation relation = Relation.aggregate(typedRelations, weights);
 
 		double expectedScore = (40 * TAG_WEIGHT + 80 * LINK_WEIGHT) / 2;
-		assertThat(relation.score()).isEqualTo(Math.round(expectedScore));
+		assertThat(relation.score()).isEqualTo(round(expectedScore));
 	}
 
 }

@@ -2,8 +2,8 @@ package org.codefx.java_after_eight;
 
 import org.codefx.java_after_eight.article.Article;
 import org.codefx.java_after_eight.article.ArticleFactory;
-import org.codefx.java_after_eight.genealogy.Genealogist;
-import org.codefx.java_after_eight.genealogy.GenealogistService;
+import org.codefx.java_after_eight.genealogist.Genealogist;
+import org.codefx.java_after_eight.genealogist.GenealogistService;
 import org.codefx.java_after_eight.genealogy.Genealogy;
 import org.codefx.java_after_eight.genealogy.Relation;
 import org.codefx.java_after_eight.genealogy.Weights;
@@ -12,7 +12,6 @@ import org.codefx.java_after_eight.recommendation.Recommender;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
