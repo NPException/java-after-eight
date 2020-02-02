@@ -25,10 +25,7 @@ public record Article(Title title,Set<Tag>tags,LocalDate date,Description descri
 	public boolean equals(Object o) {
 		if (this == o)
 			return true;
-		if (o == null || getClass() != o.getClass())
-			return false;
-		Article article = (Article) o;
-		return slug.equals(article.slug);
+		return (o instanceof Article article) && slug.equals(article.slug);
 	}
 
 	@Override
