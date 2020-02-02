@@ -23,9 +23,6 @@ import static java.util.stream.Collectors.toList;
 
 public class Main {
 
-	// text similarities: https://medium.com/@adriensieg/text-similarities-da019229c894
-	// Stanford CoreNLP: https://github.com/stanfordnlp/CoreNLP
-
 	public static void main(String[] args) {
 		System.out.println(ProcessDetails.details());
 
