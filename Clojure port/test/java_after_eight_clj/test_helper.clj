@@ -17,3 +17,13 @@
 (defn create-relation
   [article-1 article-2 ^long score]
   (@#'g/create-relation [article-1 article-2] score))
+
+
+(defn create-genealogist
+  [relation-type score-fn]
+  (reify g/Genealogist
+    (infer-typed-relation [_ article-1 article-2]
+      (g/create-typed-relation
+        article-1 article-2
+        relation-type
+        (score-fn article-1 article-2)))))
