@@ -43,7 +43,7 @@
 
 
 (defn ^:private create-relation
-  [articles score]
+  [articles ^long score]
   (when-not (<= 0 score 100)
     (throw (ex-info "Score should be in interval [0; 100]" {:score score})))
   {:articles articles

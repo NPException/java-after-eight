@@ -65,6 +65,10 @@
     (string/trim s)))
 
 
+(def reverse-comparator
+  #(compare %2 %1))
+
+
 ;; only use getPidFromMxBeanName
 (defn process-id
   []
