@@ -3,6 +3,10 @@
             [java-after-eight-clj.genealogy :as g]
             [java-time :as t]))
 
+;; workaround for an annoying "thrown? cannot be resolved"
+;; warning in the IntelliJ Cursive plugin
+(declare thrown? thrown-with-msg?)
+
 
 (defn create-article-with-slug
   [slug]

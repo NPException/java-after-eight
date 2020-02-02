@@ -1,12 +1,9 @@
 (ns java-after-eight-clj.article-tests
   (:require [clojure.test :refer :all]
+            [java-after-eight-clj.test-helper :refer :all]
             [java-time :as t]
             [java-after-eight-clj.util :as util]
             [java-after-eight-clj.article :as a]))
-
-;; workaround for an annoying "thrown? cannot be resolved"
-;; warning in the IntelliJ Cursive plugin
-(declare thrown? thrown-with-msg?)
 
 
 (defn find-buggy-quotation-removals
