@@ -41,6 +41,8 @@ public class Genealogy {
 	}
 
 	private Stream<TypedRelation> inferTypedRelations() {
+		record Articles(Article article1,Article article2) {}
+		record ArticleResearch(Genealogist genealogist,Articles articles) {}
 		return articles.stream()
 				.flatMap(article1 -> articles.stream()
 						.map(article2 -> new Articles(article1, article2)))
@@ -48,35 +50,8 @@ public class Genealogy {
 				.filter(articles -> articles.article1 != articles.article2)
 				.flatMap(articles -> genealogists.stream()
 						.map(genealogist -> new ArticleResearch(genealogist, articles)))
-				.map(ArticleResearch::infer);
-	}
-
-	private static class Articles {
-
-		final Article article1;
-		final Article article2;
-
-		Articles(Article article1, Article article2) {
-			this.article1 = article1;
-			this.article2 = article2;
-		}
-
-	}
-
-	private static class ArticleResearch {
-
-		final Genealogist genealogist;
-		final Articles articles;
-
-		ArticleResearch(Genealogist genealogist, Articles articles) {
-			this.genealogist = genealogist;
-			this.articles = articles;
-		}
-
-		TypedRelation infer() {
-			return genealogist.infer(articles.article1, articles.article2);
-		}
-
+				.map(research -> research.genealogist()
+						.infer(research.articles().article1(), research.articles().article2()));
 	}
 
 }

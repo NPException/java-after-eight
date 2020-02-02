@@ -77,7 +77,7 @@ public class Main {
 		var recs = recommendations
 				.map(rec -> {
 					String articles = rec
-							.recommendedArticles()
+							.recommendedArticles().stream()
 							.map(recArt -> recArt.title().text())
 							.map(recTitle -> recommendedArticle.replace("$TITLE", recTitle))
 							.collect(joining(",\n"));

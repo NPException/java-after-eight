@@ -7,41 +7,35 @@ import java.nio.file.Path;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
-public class Config {
+public record Config(Path articleFolder,Optional<Path>outputFile) {
 
 	private static final String CONFIG_FILE_NAME = ".recs.config";
 
-	private final Path articleFolder;
-	private final Optional<Path> outputFile;
+	// use static factory method(s)
+	@Deprecated
+	public Config { }
 
-	private Config(String[] raw) {
+	private static Config fromRawConfig(String[] raw) {
 		if (raw.length == 0)
 			throw new IllegalArgumentException("No article path defined.");
 
-		this.articleFolder = Path.of(raw[0]);
+		Path articleFolder = Path.of(raw[0]);
 		if (!Files.exists(articleFolder))
 			throw new IllegalArgumentException("Article path doesn't exist: " + articleFolder);
 		if (!Files.isDirectory(articleFolder))
 			throw new IllegalArgumentException("Article path is no directory: " + articleFolder);
 
-		Optional<String> outputFile = raw.length >= 2
+		Optional<String> outputFileString = raw.length >= 2
 				? Optional.of(raw[1])
 				: Optional.empty();
-		this.outputFile = outputFile
+		Optional<Path> outputFile = outputFileString
 				.map(file -> Path.of(System.getProperty("user.dir")).resolve(file));
-		this.outputFile.ifPresent(file -> {
+		outputFile.ifPresent(file -> {
 			boolean notWritable = Files.exists(file) && !Files.isWritable(file);
 			if (notWritable)
-				throw new IllegalArgumentException("Output path is not writable: " + this.outputFile.get());
+				throw new IllegalArgumentException("Output path is not writable: " + file);
 		});
-	}
-
-	public Path articleFolder() {
-		return articleFolder;
-	}
-
-	public Optional<Path> outputFile() {
-		return outputFile;
+		return new Config(articleFolder, outputFile);
 	}
 
 	public static CompletableFuture<Config> create(String[] args) {
@@ -52,7 +46,7 @@ public class Config {
 						.exceptionally(__ -> new String[0]);
 
 		return rawConfig
-				.thenApply(Config::new);
+				.thenApply(Config::fromRawConfig);
 	}
 
 	private static CompletableFuture<String[]> readProjectConfig() {

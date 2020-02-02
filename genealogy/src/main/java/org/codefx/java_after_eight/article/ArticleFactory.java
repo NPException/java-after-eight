@@ -4,7 +4,6 @@ import org.codefx.java_after_eight.Utils;
 
 import java.nio.file.Path;
 import java.time.LocalDate;
-import java.util.AbstractMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -63,8 +62,8 @@ public final class ArticleFactory {
 
 	public static Article createArticle(Stream<String> frontMatter, Content content) {
 		Map<String, String> entries = frontMatter
-				.map(ArticleFactory::keyValuePairFrom)
-				.collect(toMap(Map.Entry::getKey, Map.Entry::getValue));
+				.map(FrontMatterLine::fromLine)
+				.collect(toMap(FrontMatterLine::key, FrontMatterLine::value));
 		return new Article(
 				Title.from(entries.get(TITLE)),
 				Tag.from(entries.get(TAGS)),
@@ -74,16 +73,20 @@ public final class ArticleFactory {
 				content);
 	}
 
-	private static Map.Entry<String, String> keyValuePairFrom(String line) {
-		String[] pair = line.split(":", 2);
-		if (pair.length < 2)
-			throw new IllegalArgumentException("Line doesn't seem to be a key/value pair (no colon): " + line);
-		String key = pair[0].strip().toLowerCase();
-		if (key.isBlank())
-			throw new IllegalArgumentException("Line \"" + line + "\" has no key.");
+	private record FrontMatterLine(String key,String value) {
 
-		String value = pair[1].strip();
-		return new AbstractMap.SimpleImmutableEntry<>(key, value);
+		static FrontMatterLine fromLine(String line) {
+			String[] pair = line.split(":", 2);
+			if (pair.length < 2)
+				throw new IllegalArgumentException("Line doesn't seem to be a key/value pair (no colon): " + line);
+			String key = pair[0].strip().toLowerCase();
+			if (key.isBlank())
+				throw new IllegalArgumentException("Line \"" + line + "\" has no key.");
+
+			String value = pair[1].strip();
+			return new FrontMatterLine(key, value);
+		}
+
 	}
 
 }
