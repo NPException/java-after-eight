@@ -9,7 +9,7 @@
 (declare thrown? thrown-with-msg?)
 
 
-(defn ^:private find-buggy-quotation-removals
+(defn find-buggy-quotation-removals
   [parse-fn]
   (for [[text expected] [["A cool blog post"
                           "A cool blog post"]

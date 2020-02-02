@@ -3,7 +3,8 @@
             [java-after-eight-clj.test-helper :refer :all]
             [java-after-eight-clj.recommendation :as r]))
 
-(defn ^:private create-recommendation
+;; convenience function
+(defn create-recommendation
   [article recommended-articles]
   (@#'r/create-recommendation
     article
@@ -11,16 +12,16 @@
     (count recommended-articles)))
 
 
-(def ^:private articleA (create-article-with-slug "a"))
-(def ^:private articleB (create-article-with-slug "b"))
-(def ^:private articleC (create-article-with-slug "c"))
+(def articleA (create-article-with-slug "a"))
+(def articleB (create-article-with-slug "b"))
+(def articleC (create-article-with-slug "c"))
 
-(def ^:private relation-AB (create-relation articleA, articleB, 60))
-(def ^:private relation-AC (create-relation articleA, articleC, 40))
-(def ^:private relation-BA (create-relation articleB, articleA, 50))
-(def ^:private relation-BC (create-relation articleB, articleC, 70))
-(def ^:private relation-CA (create-relation articleC, articleA, 80))
-(def ^:private relation-CB (create-relation articleC, articleB, 60))
+(def relation-AB (create-relation articleA, articleB, 60))
+(def relation-AC (create-relation articleA, articleC, 40))
+(def relation-BA (create-relation articleB, articleA, 50))
+(def relation-BC (create-relation articleB, articleC, 70))
+(def relation-CA (create-relation articleC, articleA, 80))
+(def relation-CB (create-relation articleC, articleB, 60))
 
 
 (deftest forOneArticle_oneRelation
