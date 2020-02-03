@@ -8,6 +8,10 @@
 (declare thrown? thrown-with-msg?)
 
 
+(defn round [n]
+  (Math/round (double n)))
+
+
 (defn create-article-with-slug
   [slug]
   {:title       (@#'a/create-title "Title"),

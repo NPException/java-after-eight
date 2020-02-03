@@ -68,10 +68,6 @@
     0.5))
 
 
-(defn round [n]
-  (Math/round (double n)))
-
-
 ;; TESTS
 
 (deftest oneGenealogist_twoArticles
