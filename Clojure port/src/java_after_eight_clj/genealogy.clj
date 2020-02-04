@@ -42,7 +42,9 @@
   {:articles [(util/assert-not-nil article-1)
               (util/assert-not-nil article-2)]
    :type     (validate-relation-type relation-type)
-   :score    score})
+   :score    (if (integer? score)
+               score
+               (Math/round (double score)))})
 
 
 (defn ^:private create-relation
