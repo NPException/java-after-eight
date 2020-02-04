@@ -24,8 +24,8 @@
 (def articleB (create-article-with-slug "b"))
 (def articleC (create-article-with-slug "c"))
 
-(def tag-relation (@#'g/create-relation-type "tag"))
-(def link-relation (@#'g/create-relation-type "link"))
+(def tag-relation (@#'g/validate-relation-type "tag"))
+(def link-relation (@#'g/validate-relation-type "link"))
 
 
 (defn build-score-function

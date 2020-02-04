@@ -10,9 +10,12 @@
 
 
 
-(defn create-relation-type
+(defn validate-relation-type
   [value]
-  (util/assert-not-empty value "Relation types can't have an empty value."))
+  (util/assert-not-nil value "Relation types can't be nil")
+  (when (seqable? value)
+    (util/assert-not-empty value "Relation types can't have an empty value."))
+  value)
 
 
 ;; org.codefx.java_after_eight.genealogy.Weights
@@ -38,7 +41,7 @@
     (throw (ex-info "Score should be in interval [0; 100]" {:score score})))
   {:articles [(util/assert-not-nil article-1)
               (util/assert-not-nil article-2)]
-   :type     (util/assert-not-nil relation-type)
+   :type     (validate-relation-type relation-type)
    :score    score})
 
 

@@ -3,8 +3,8 @@
             [java-after-eight-clj.test-helper :refer :all]
             [java-after-eight-clj.genealogy :as g]))
 
-(def tag-type (g/create-relation-type "tag"))
-(def list-type (g/create-relation-type "list"))
+(def tag-type (g/validate-relation-type "tag"))
+(def list-type (g/validate-relation-type "list"))
 
 (def weights (g/create-weights {tag-type 0.42} 0.5))
 
