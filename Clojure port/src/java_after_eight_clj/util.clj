@@ -105,3 +105,33 @@
               (print "Caused by: ")
               (recur cause))
           (st/print-stack-trace ex))))))
+
+
+(def ^:private op-prio
+  '{+ 1, - 1, * 2, / 2})
+
+(defn ^:private takes-precedence?
+  "checks if the first operator takes precedence over the second"
+  [op1 op2]
+  (> (op-prio op1) (op-prio op2)))
+
+
+(defmacro infix
+  "Toy macro. Takes a mathmatical calculation in infix notation. Supports +,-,*,/
+  Do not use in serious applications!"
+  [[a op b & args :as element]]
+  (cond
+    ;; if op is not known, assume the entire element is a function call
+    (not (op-prio op))
+    element
+    ;; only three elements
+    (empty? args)
+    (list op
+          (if (list? a) `(infix ~a) a)
+          (if (list? b) `(infix ~b) b))
+    ;; first operator takes precedence
+    (takes-precedence? op (first args))
+    `(infix ~(concat [(list a op b)] args))
+    ;; second operator takes precedence
+    :else
+    `(infix ~(concat [a op] [(conj args b)]))))

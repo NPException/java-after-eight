@@ -37,6 +37,7 @@
   (util/assert-not-empty text "Tags can't have en empty text."))
 
 (defn ^:private create-tags
+  "Creates a set of tags from the given text"
   [tags-text]
   (let [raw-tags (-> tags-text
                      (string/replace #"^\[|\]$" "")
