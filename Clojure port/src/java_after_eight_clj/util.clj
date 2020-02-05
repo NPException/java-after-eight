@@ -1,8 +1,7 @@
 (ns java-after-eight-clj.util
   (:require [clojure.string :as string]
             [clojure.stacktrace :as st])
-  (:import [java.lang.management ManagementFactory]
-           [java.util.function Function]))
+  (:import [java.util.function Function]))
 
 
 (defn remove-outer-quotation-marks
@@ -34,36 +33,12 @@
 (def java-version
   "The major java version of the running JVM.
   Zero if it couldn't be determined."
-  (try
-    (let [version (System/getProperty "java.version")]
-      (Integer/parseInt
-        (cond
-          (string/starts-with? version "1.")
-          (-> version (subs 2 3))
-
-          (.contains version ".")
-          (-> version (string/split #"\.") first)
-
-          :else
-          version)))
-    (catch Exception _
-      0)))
+  (.major (Runtime/version)))
 
 
-;; this is merely a proof of concept for myself, that it's
-;; possible to vary the implementation at runtime based on
-;; the available Java version. In this case for slightly
-;; better performance than clojure.string/trim.
-(declare strip)
-(if (>= java-version 11)
-  ; Use Java 11 strip for better performance if available
-  (eval '(defn strip
-           [^String s]
-           (.strip s)))
-  ;; fallback to clojure's trim if we're not yet on Java 11
-  (eval '(defn strip
-           [^String s]
-           (string/trim s))))
+(defn strip
+  [^String s]
+  (.strip s))
 
 
 (def reverse-comparator
@@ -73,13 +48,7 @@
 ;; only use getPidFromMxBeanName
 (defn process-id
   []
-  (try
-    (-> (ManagementFactory/getRuntimeMXBean)
-        .getName
-        (string/split #"@")
-        first
-        Long/parseLong)
-    (catch Exception _)))
+  (.pid (java.lang.ProcessHandle/current)))
 
 
 (defn process-details
