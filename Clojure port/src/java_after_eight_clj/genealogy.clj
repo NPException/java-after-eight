@@ -91,7 +91,8 @@
   [articles genealogists]
   (for [a1 articles
         a2 articles
-        g genealogists]
+        g genealogists
+        :when (not= a1 a2)]
     (infer-typed-relation g a1 a2)))
 
 
