@@ -16,7 +16,7 @@
                     (infix
                       (100.0 * 2 * overlap-count
                         / ((count article-1-tags) + (count article-2-tags)))))]
-        (g/create-typed-relation article-1 article-1 :tag score)))))
+        (g/create-typed-relation article-1 article-2 :tag score)))))
 
 
 (def tag-service
