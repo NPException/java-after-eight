@@ -55,33 +55,20 @@
    :score    score})
 
 
-(defn ^:private create-unfinished-relation
-  [{:keys [articles score] :as typed-relation} ^double weight]
-  {:articles    articles
-   :score-total (* score weight)
-   :score-count 1})
-
-
-(defn ^:private fold-unfinished-relations
-  [ur-1 ur-2]
-  (when (not= (:articles ur-1) (:articles ur-2))
-    (ex-info "All typed relations must belong to the same article."
-             {:unfinished-relation-1 ur-1
-              :unfinished-relation-2 ur-2}))
-  (-> ur-1
-      (update :score-total + (:score-total ur-2))
-      (update :score-count + (:score-count ur-2))))
-
-
 ;; equivalent of Relation.aggregate
 (defn ^:private aggregate-relation
   [typed-relations weights]
   (util/assert-not-empty
     typed-relations "Can't create relation from zero typed relations.")
-  (let [{:keys [articles score-total score-count]}
-        (->> typed-relations
-             (map #(create-unfinished-relation % (weights (:type %))))
-             (reduce fold-unfinished-relations))]
+  (let [articles (:articles (first typed-relations))
+        [score-total score-count]
+        (reduce (fn [[total n] relation]
+                  (when (not= articles (:articles relation))
+                    (ex-info "All typed relations must belong to the same article." {}))
+                  [(+ total (* (:score relation) (weights (:type relation))))
+                   (inc n)])
+                [0 0]
+                typed-relations)]
     (create-relation
       articles
       (Math/round ^double (/ score-total score-count)))))
