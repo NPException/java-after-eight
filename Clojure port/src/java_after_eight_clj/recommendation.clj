@@ -9,7 +9,7 @@
 
 
 (defn recommend
-  [relations per-article]
+  [per-article relations]
   (when (< per-article 1)
     (throw
       (ex-info

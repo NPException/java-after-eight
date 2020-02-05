@@ -9,6 +9,7 @@
   :resource-paths ["genealogists/src/main/resources"]
   :test-paths ["genealogy/src/test/java" "Clojure port/test"]
   :target-path "target/%s"
+  :main java-after-eight-clj.main
   :profiles {:uberjar {:aot :all}
              :dev     {:dependencies [[org.junit.jupiter/junit-jupiter-api ~junit-jupiter-version]
                                       [org.junit.jupiter/junit-jupiter-params ~junit-jupiter-version]

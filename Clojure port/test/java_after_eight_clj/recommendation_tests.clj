@@ -25,27 +25,26 @@
 
 
 (deftest forOneArticle_oneRelation
-  (is (= (set (r/recommend [relation-AC] 1))
+  (is (= (set (r/recommend 1 [relation-AC]))
          #{(create-recommendation articleA [articleC])})))
 
 
 (deftest forOneArticle_twoRelations
-  (is (= (set (r/recommend [relation-AB relation-AC] 1))
+  (is (= (set (r/recommend 1 [relation-AB relation-AC]))
          #{(create-recommendation articleA [articleB])})))
 
 
 (deftest forManyArticles_oneRelationEach
-  (is (= (set (r/recommend [relation-AC relation-BC relation-CB] 1))
+  (is (= (set (r/recommend 1 [relation-AC relation-BC relation-CB]))
          #{(create-recommendation articleA [articleC])
            (create-recommendation articleB [articleC])
            (create-recommendation articleC [articleB])})))
 
 
 (deftest forManyArticles_twoRelationsEach
-  (is (= (set (r/recommend [relation-AB relation-AC
-                            relation-BA relation-BC
-                            relation-CA relation-CB]
-                           1))
+  (is (= (set (r/recommend 1 [relation-AB relation-AC
+                              relation-BA relation-BC
+                              relation-CA relation-CB]))
          #{(create-recommendation articleA [articleB])
            (create-recommendation articleB [articleC])
            (create-recommendation articleC [articleA])})))
