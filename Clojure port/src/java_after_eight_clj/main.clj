@@ -126,7 +126,8 @@
                       seq
                       (filter #(.isFile ^File %))
                       (filter #(-> ^File % .getName (.endsWith ".md")))
-                      (mapv parse-article-from-file))
+                      (pmap parse-article-from-file)
+                      vec)
         genealogists (magic-genealogist-service-discovery articles)
         weights (create-weights)]
     (->> (infer-relations articles genealogists weights)

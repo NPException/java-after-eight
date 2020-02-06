@@ -11,7 +11,6 @@ Clojure - avg: 400 ms
 
 
 
-Run from AOT'd uberjar:
+> parallelize article parsing
 
-   Java - avg: 76 ms
-Clojure - avg: 387 ms
+Clojure - avg: 336 ms
