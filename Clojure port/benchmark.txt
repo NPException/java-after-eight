@@ -16,3 +16,6 @@ Clojure - avg: 336 ms
 
 > parallelize infer-typed-relations
 Clojure - avg: 199 ms
+
+> use transient map in aggregate-typed-relations
+Clojure - avg: 195 ms

@@ -89,8 +89,9 @@
   (->> typed-relations
        (reduce
          (fn [result {:keys [articles] :as relation}]
-           (update result articles conj relation))
-         {})
+           (util/update! result articles conj relation))
+         (transient {}))
+       persistent!
        (mapv #(aggregate-relation (val %) weights))))
 
 
