@@ -1,0 +1,17 @@
+All measured on my Desktop PC (Windows 10 Home)
+Ryzen 7 2700X @ 4.0 GHz
+32 GB RAM
+
+
+Baseline @ REPL:
+
+   Java - avg: 48 ms
+Clojure - avg: 400 ms
+(Note: pretty-printing to EDN format is damn expensive; the avg goes up to 716 ms in that case)
+
+
+
+Run from AOT'd uberjar:
+
+   Java - avg: 76 ms
+Clojure - avg: 387 ms

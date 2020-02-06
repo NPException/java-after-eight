@@ -3,7 +3,6 @@
   (:require [clojure.string :as string]
             [clojure.java.io :as io]
             [clojure.pprint :as pp]
-            [clojure.edn :as edn]
             [java-after-eight-clj.article
              :refer [parse-article-from-file]]
             [java-after-eight-clj.genealogy
@@ -143,6 +142,8 @@
 (defmacro bench [name & body]
   `(let [time# (volatile! 0)]
      (dotimes [n# 10]
+       (print n# "- ")
+       (flush)
        (let [start# (System/currentTimeMillis)]
          ~@body
          (vswap! time# + (- (System/currentTimeMillis) start#))))
@@ -161,5 +162,6 @@
            (clj-main clj-args))))
 
 (comment
-  (-main "articles" "recommendations.json"))
+  (-main "articles" "recommendations.json" "clj-recommendations.edn")
+  (-main "articles" "recommendations.json" "clj-recommendations.json"))
 
