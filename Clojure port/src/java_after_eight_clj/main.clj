@@ -35,38 +35,32 @@
 
 (defn ^:private create-config
   [args]
-  (let [[line1 line2 line3] (or (not-empty args)
-                                (read-project-config)
-                                (read-user-config))]
+  (let [[line1 line2] (or (not-empty args)
+                          (read-project-config)
+                          (read-user-config))]
     (when (nil? line1)
       (throw (ex-info "No article path defined." {})))
-    (when (nil? line2)
-      (throw (ex-info "No genealogists services file defined." {})))
     (let [article-folder (io/file line1)
-          genealogists-file (io/file line2)
-          output-file (some->> line3
+          output-file (some->> line2
                                (io/file (System/getProperty "user.dir")))]
       (when-not (.isDirectory article-folder)
         (throw (ex-info "Article path is no directory."
                         {:path line1})))
-      (when-not (.canRead genealogists-file)
-        (throw (ex-info "Genealogists services file not readable."
-                        {:path line2})))
       (when (and output-file
                  (.exists output-file)
                  (not (.canWrite output-file)))
         (throw (ex-info "Output path is not writable."
-                        {:path line3})))
-      [article-folder genealogists-file output-file])))
+                        {:path line2})))
+      [article-folder output-file])))
 
 
-(defn ^:private get-genealogists
-  [genealogists-file articles]
+(defn ^:private magic-genealogist-service-discovery
+  [articles]
   ;; I don't know what the best equivalent to using ServiceLoader
   ;; would be in Clojure. That's beyond my experience level...
   ;; So I'll do this instead.
-  (->> (slurp genealogists-file)
-       edn/read-string
+  (->> '[java-after-eight-clj.genealogists.clojure.silly-genealogist/silly-service
+         java-after-eight-clj.genealogists.clojure.tag-genealogist/tag-service]
        (mapv requiring-resolve)
        (map deref)
        (mapv #(procure % articles))
@@ -124,17 +118,17 @@
     (spit out (serialize recommendations))))
 
 
-(defn -main [& args]
+(defn clj-main
+  [args]
   (println (util/process-details))
   (let [[^File article-folder
-         ^File genealogists-file
          ^File output-file] (create-config args)
         articles (->> (.listFiles article-folder)
                       seq
                       (filter #(.isFile ^File %))
                       (filter #(-> ^File % .getName (.endsWith ".md")))
                       (mapv parse-article-from-file))
-        genealogists (get-genealogists genealogists-file articles)
+        genealogists (magic-genealogist-service-discovery articles)
         weights (create-weights)]
     (->> (infer-relations articles genealogists weights)
          (recommend 3)
@@ -142,5 +136,30 @@
 
 
 (comment
-  (-main "articles" "Clojure port/genealogists.edn" "recommendations.edn")
-  (-main "articles" "Clojure port/genealogists.edn" "recommendations.json"))
+  (clj-main ["articles" "recommendations.edn"])
+  (clj-main ["articles" "recommendations.json"]))
+
+
+(defmacro bench [name & body]
+  `(let [time# (volatile! 0)]
+     (dotimes [n# 10]
+       (let [start# (System/currentTimeMillis)]
+         ~@body
+         (vswap! time# + (- (System/currentTimeMillis) start#))))
+     (println ~name "- avg:" (quot @time# 10) "ms")))
+
+
+(defn -main
+  [& [articles-file
+      java-output-file
+      clj-output-file]]
+  (let [java-args (into-array [articles-file java-output-file])
+        clj-args [articles-file (or clj-output-file java-output-file)]]
+    (bench "   Java"
+           (org.codefx.java_after_eight.Main/main java-args))
+    (bench "Clojure"
+           (clj-main clj-args))))
+
+(comment
+  (-main "articles" "recommendations.json"))
+
