@@ -1,7 +1,7 @@
 (ns java-after-eight-clj.article
   (:require [java-after-eight-clj.util :as util]
-            [java-time :as t]
-            [clojure.string :as string]))
+            [clojure.string :as string])
+  (:import [java.time LocalDate]))
 
 ;; Note: I will try to stay away from introducing new types, as much as possible,
 ;;       but instead use basic Clojure data structures as long as they suffice.
@@ -98,7 +98,7 @@
              (into {}))]
     {:title       (create-title title)
      :tags        (create-tags tags)
-     :date        (t/local-date date)
+     :date        (LocalDate/parse date)
      :description (create-description description)
      :slug        (create-slug slug)
      :content-fn  content-fn}))

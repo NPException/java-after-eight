@@ -2,8 +2,7 @@
 (def mockito-version "3.2.4")
 
 (defproject java-after-eight-clj "0.1.0-SNAPSHOT"
-  :dependencies [[org.clojure/clojure "1.10.1"]
-                 [clojure.java-time "0.3.2"]]
+  :dependencies [[org.clojure/clojure "1.10.1"]]
   :source-paths ["Clojure port/src"]
   :java-source-paths ["genealogy/src/main/java" "genealogists/src/main/java"]
   :resource-paths ["genealogists/src/main/resources"]

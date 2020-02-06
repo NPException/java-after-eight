@@ -1,9 +1,9 @@
 (ns java-after-eight-clj.article-tests
   (:require [clojure.test :refer :all]
             [java-after-eight-clj.test-helper :refer :all]
-            [java-time :as t]
             [java-after-eight-clj.util :as util]
-            [java-after-eight-clj.article :as a]))
+            [java-after-eight-clj.article :as a])
+  (:import [java.time LocalDate]))
 
 
 (defn find-buggy-quotation-removals
@@ -75,7 +75,7 @@
       (is (= (:title article) "Cool: A blog post"))
       (is (and (set? (:tags article))
                (= (:tags article) #{"$TAG", "$TOG"})))
-      (is (= (:date article) (t/local-date 2020 1 23)))
+      (is (= (:date article) (LocalDate/of 2020 1 23)))
       (is (= (:description article) "Very blog, much post, so wow"))
       (is (= (:slug article) "cool-blog-post"))))
 
@@ -90,7 +90,7 @@
       (is (= (:title article) "A cool blog post"))
       (is (and (set? (:tags article))
                (= (:tags article) #{"$TAG", "$TOG"})))
-      (is (= (:date article) (t/local-date 2020 1 23)))
+      (is (= (:date article) (LocalDate/of 2020 1 23)))
       (is (= (:description article) "Very blog, much post, so wow"))
       (is (= (:slug article) "cool-blog-post")))))
 
@@ -114,7 +114,7 @@
       (is (= (:title article) "A cool blog post"))
       (is (and (set? (:tags article))
                (= (:tags article) #{"$TAG", "$TOG"})))
-      (is (= (:date article) (t/local-date 2020 1 23)))
+      (is (= (:date article) (LocalDate/of 2020 1 23)))
       (is (= (:description article) "Very blog, much post, so wow"))
       (is (= (:slug article) "cool-blog-post"))
       (is (= ((:content-fn article))

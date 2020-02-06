@@ -1,7 +1,7 @@
 (ns java-after-eight-clj.test-helper
   (:require [java-after-eight-clj.article :as a]
-            [java-after-eight-clj.genealogy :as g]
-            [java-time :as t]))
+            [java-after-eight-clj.genealogy :as g])
+  (:import [java.time LocalDate]))
 
 ;; workaround for an annoying "thrown? cannot be resolved"
 ;; warning in the IntelliJ Cursive plugin
@@ -16,7 +16,7 @@
   [slug]
   {:title       (@#'a/create-title "Title"),
    :tags        (@#'a/create-tags "[Tag]"),
-   :date        (t/local-date),
+   :date        (LocalDate/now),
    :description (@#'a/create-description "description"),
    :slug        (@#'a/create-slug slug),
    :content-fn  (constantly [""])})
