@@ -76,11 +76,12 @@
 
 (defn ^:private infer-typed-relations
   [articles genealogists]
-  (for [a1 articles
-        a2 articles
-        g genealogists
-        :when (not= a1 a2)]
-    (infer-typed-relation g a1 a2)))
+  (->> (for [a1 articles
+             a2 articles
+             g genealogists
+             :when (not= a1 a2)]
+         [g a1 a2])
+       (pmap #(apply infer-typed-relation %))))
 
 
 (defn ^:private aggregate-typed-relations

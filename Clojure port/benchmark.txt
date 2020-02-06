@@ -12,5 +12,7 @@ Clojure - avg: 400 ms
 
 
 > parallelize article parsing
-
 Clojure - avg: 336 ms
+
+> parallelize infer-typed-relations
+Clojure - avg: 199 ms
