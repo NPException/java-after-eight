@@ -1,4 +1,5 @@
 (ns java-after-eight-clj.main
+  (:gen-class)
   (:require [clojure.string :as string]
             [clojure.java.io :as io]
             [clojure.pprint :as pp]

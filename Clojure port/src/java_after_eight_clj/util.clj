@@ -56,13 +56,13 @@
 (declare strip)
 (if (>= java-version 11)
   ; Use Java 11 strip for better performance if available
-  (defn strip
-    [^String s]
-    (.strip s))
+  (eval '(defn strip
+           [^String s]
+           (.strip s)))
   ;; fallback to clojure's trim if we're not yet on Java 11
-  (defn strip
-    [^String s]
-    (string/trim s)))
+  (eval '(defn strip
+           [^String s]
+           (string/trim s))))
 
 
 (def reverse-comparator

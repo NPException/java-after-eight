@@ -25,5 +25,6 @@
        (mapv (fn [[article relations]]
                (create-recommendation
                  article
-                 (map #(assoc (second (:articles %)) :score (:score %)) relations)
+                 (map #(-> % :articles second) relations)
+                 #_(map #(assoc (second (:articles %)) :score (:score %)) relations)
                  per-article)))))
