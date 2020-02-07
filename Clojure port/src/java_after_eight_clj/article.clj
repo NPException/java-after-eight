@@ -90,18 +90,21 @@
 
 ;; equivalents of ArticleFactory.createArticle(..)
 
+(defrecord Article [title tags date description slug content-fn])
+
 (defn ^:private parse-article
-  [front-matter content-fn]
+  ^Article [front-matter content-fn]
   (let [{:keys [title tags date description slug]}
         (->> front-matter
              (map line->key-value-pair)
              (into {}))]
-    {:title       (create-title title)
-     :tags        (create-tags tags)
-     :date        (LocalDate/parse date)
-     :description (create-description description)
-     :slug        (create-slug slug)
-     :content-fn  content-fn}))
+    (->Article
+      (create-title title)
+      (create-tags tags)
+      (LocalDate/parse date)
+      (create-description description)
+      (create-slug slug)
+      content-fn)))
 
 
 (defn parse-article-from-lines

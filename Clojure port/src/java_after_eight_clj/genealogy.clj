@@ -35,43 +35,40 @@
      (get weights-map genealogist-type default-weight))))
 
 
+(defrecord TypedRelation [article-1, article-2, type, ^long score])
+
 (defn create-typed-relation
   [article-1 article-2 relation-type score]
   (when-not (<= 0 score 100)
     (throw (ex-info "Score should be in interval [0; 100]" {:score score})))
-  {:articles [(util/assert-not-nil article-1)
-              (util/assert-not-nil article-2)]
-   :type     (validate-relation-type relation-type)
-   :score    (if (integer? score)
-               score
-               (Math/round (double score)))})
+  (->TypedRelation
+    (util/assert-not-nil article-1)
+    (util/assert-not-nil article-2)
+    (validate-relation-type relation-type)
+    (Math/round (double score))))
 
 
-(defn ^:private create-relation
-  [articles ^long score]
-  (when-not (<= 0 score 100)
-    (throw (ex-info "Score should be in interval [0; 100]" {:score score})))
-  {:articles articles
-   :score    score})
-
+(defrecord Relation [article-1, article-2, ^long score])
 
 ;; equivalent of Relation.aggregate
 (defn ^:private aggregate-relation
   [typed-relations weights]
   (util/assert-not-empty
     typed-relations "Can't create relation from zero typed relations.")
-  (let [articles (:articles (first typed-relations))
+  (let [{:keys [article-1 article-2]} (first typed-relations)
         [score-total score-count]
         (reduce (fn [[total n] relation]
-                  (when (not= articles (:articles relation))
+                  (when-not (and (= article-1 (:article-1 relation))
+                                 (= article-2 (:article-2 relation)))
                     (ex-info "All typed relations must belong to the same article." {}))
                   [(+ total (* (:score relation) (weights (:type relation))))
                    (inc n)])
                 [0 0]
-                typed-relations)]
-    (create-relation
-      articles
-      (Math/round ^double (/ score-total score-count)))))
+                typed-relations)
+        score (Math/round ^double (/ score-total score-count))]
+    (when-not (<= 0 score 100)
+      (throw (ex-info "Score should be in interval [0; 100]" {:score score})))
+    (->Relation article-1 article-2 score)))
 
 
 (defn ^:private infer-typed-relations
@@ -88,8 +85,8 @@
   [typed-relations weights]
   (->> typed-relations
        (reduce
-         (fn [result {:keys [articles] :as relation}]
-           (util/update! result articles conj relation))
+         (fn [result relation]
+           (util/update! result [(:article-1 relation) (:article-2 relation)] conj relation))
          (transient {}))
        persistent!
        (mapv #(aggregate-relation (val %) weights))))

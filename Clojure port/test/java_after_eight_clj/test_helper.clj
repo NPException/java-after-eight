@@ -24,7 +24,7 @@
 
 (defn create-relation
   [article-1 article-2 ^long score]
-  (@#'g/create-relation [article-1 article-2] score))
+  (g/->Relation article-1 article-2 score))
 
 
 (defn create-genealogist

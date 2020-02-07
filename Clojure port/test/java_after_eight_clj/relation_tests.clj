@@ -23,9 +23,9 @@
                    [(g/create-typed-relation
                       articleA articleB tag-relation score)]
                    weights)]
-    (is (= (-> relation :articles first)
+    (is (= (:article-1 relation)
            articleA))
-    (is (= (-> relation :articles second)
+    (is (= (:article-2 relation)
            articleB))
     (is (= score (:score relation)))))
 

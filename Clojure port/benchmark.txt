@@ -19,3 +19,6 @@ Clojure - avg: 199 ms
 
 > use transient map in aggregate-typed-relations
 Clojure - avg: 195 ms
+
+> use records for more efficient field access
+Clojure - avg: 137 ms

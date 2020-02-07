@@ -143,8 +143,6 @@
 (defmacro bench [name & body]
   `(let [time# (volatile! 0)]
      (dotimes [n# 10]
-       (print n# "- ")
-       (flush)
        (let [start# (System/currentTimeMillis)]
          ~@body
          (vswap! time# + (- (System/currentTimeMillis) start#))))

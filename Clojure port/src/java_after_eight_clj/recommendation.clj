@@ -2,10 +2,13 @@
   (:require [java-after-eight-clj.util :as util]))
 
 
+(defrecord Recommendation [article recommendations])
+
 (defn ^:private create-recommendation
   [article sorted-recommendations per-article]
-  {:article         (util/assert-not-nil article)
-   :recommendations (take per-article (util/assert-not-nil sorted-recommendations))})
+  (->Recommendation
+    (util/assert-not-nil article)
+    (take per-article (util/assert-not-nil sorted-recommendations))))
 
 
 (defn recommend
@@ -18,13 +21,13 @@
          :num       per-article})))
 
   (->> relations
-       (sort-by (juxt #(-> % :articles first :slug)
+       (sort-by (juxt #(-> % :article-1 :slug)
                       :score)
                 util/reverse-comparator)
-       (group-by #(-> % :articles first))
+       (group-by :article-1)
        (mapv (fn [[article relations]]
                (create-recommendation
                  article
-                 (map #(-> % :articles second) relations)
-                 #_(map #(assoc (second (:articles %)) :score (:score %)) relations)
+                 (map :article-2 relations)
+                 #_(map #(assoc (:article-2 %) :score (:score %)) relations)
                  per-article)))))
