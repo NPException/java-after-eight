@@ -1,7 +1,9 @@
 (ns java-after-eight-clj.article
   (:require [java-after-eight-clj.util :as util]
             [clojure.string :as string])
-  (:import [java.time LocalDate]))
+  (:import [java.time LocalDate]
+           [java.nio.file Files]
+           [java.io File]))
 
 ;; Note: I will try to stay away from introducing new types, as much as possible,
 ;;       but instead use basic Clojure data structures as long as they suffice.
@@ -115,9 +117,9 @@
 
 
 (defn parse-article-from-file
-  [file]
+  [^File file]
   (try
-    (let [lines-fn #(-> file slurp string/split-lines)]
+    (let [lines-fn #(-> file .toPath Files/readAllLines)]
       (parse-article
         (extract-front-matter (lines-fn))
         (comp extract-content lines-fn)))
