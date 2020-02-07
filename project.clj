@@ -2,6 +2,7 @@
 (def mockito-version "3.2.4")
 
 (defproject java-after-eight-clj "0.1.0-SNAPSHOT"
+  :global-vars {*warn-on-reflection* true}
   :dependencies [[org.clojure/clojure "1.10.1"]]
   :source-paths ["Clojure port/src"]
   :java-source-paths ["genealogy/src/main/java" "genealogists/src/main/java"]
