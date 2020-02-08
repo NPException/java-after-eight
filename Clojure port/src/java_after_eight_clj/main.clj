@@ -135,6 +135,12 @@
          (print-to-out (or output-file *out*)))))
 
 
+(defn -main
+  [& [articles-file output-file]]
+  (clj-main [articles-file output-file])
+  (shutdown-agents))
+
+
 
 (defmacro bench [name repetitions & body]
   `(let [time# (volatile! 0)]
@@ -145,12 +151,10 @@
      (println ~name "- avg:" (quot @time# ~repetitions) "ms")))
 
 
-(defn -main
-  [& [articles-file
-      java-output-file
-      clj-output-file]]
+(defn bench-all
+  [articles-file java-output-file clj-output-file]
   (let [java-args (into-array [articles-file java-output-file])
-        clj-args [articles-file (or clj-output-file java-output-file)]]
+        clj-args [articles-file clj-output-file]]
 
     (bench "   Warmup Java" 50
            (org.codefx.java_after_eight.Main/main java-args))
@@ -160,16 +164,19 @@
     (bench "   Java" 50
            (org.codefx.java_after_eight.Main/main java-args))
     (bench "Clojure" 50
-           (clj-main clj-args)))
-  (shutdown-agents))
+           (clj-main clj-args))))
 
 
 (comment
-  (-main "articles" "recommendations.json" "clj-recommendations.edn")
-  (-main "articles" "recommendations.json" "clj-recommendations.json")
+  (bench-all "articles" "recommendations.json" "clj-recommendations.edn")
+  (bench-all "articles" "recommendations.json" "clj-recommendations.json")
 
-  (time (clj-main ["articles" "recommendations.edn"]))
-  (time (clj-main ["articles" "recommendations.json"]))
+  (do
+    (time (org.codefx.java_after_eight.Main/main (into-array ["articles" "recommendations.json"])))
+    (time (clj-main ["articles" "clj-recommendations.json"])))
+
+  (time (clj-main ["articles" "clj-recommendations.edn"]))
+  (time (clj-main ["articles" "clj-recommendations.json"]))
 
   )
 
