@@ -56,16 +56,18 @@
   (util/assert-not-empty
     typed-relations "Can't create relation from zero typed relations.")
   (let [{:keys [article-1 article-2]} (first typed-relations)
-        [score-total score-count]
-        (reduce (fn [[total n] relation]
-                  (when-not (and (= article-1 (:article-1 relation))
-                                 (= article-2 (:article-2 relation)))
-                    (ex-info "All typed relations must belong to the same article." {}))
-                  [(+ total (* (:score relation) (weights (:type relation))))
-                   (inc n)])
-                [0 0]
-                typed-relations)
-        score (Math/round ^double (/ score-total score-count))]
+        score (loop [score-total 0.0
+                     score-count 0
+                     remaining typed-relations]
+                (if remaining
+                  (let [relation (first remaining)]
+                    (when-not (and (= article-1 (:article-1 relation))
+                                   (= article-2 (:article-2 relation)))
+                      (ex-info "All typed relations must belong to the same article." {}))
+                    (recur (+ score-total (* (:score relation) (weights (:type relation))))
+                           (inc score-count)
+                           (next remaining)))
+                  (Math/round ^double (/ score-total score-count))))]
     (when-not (<= 0 score 100)
       (throw (ex-info "Score should be in interval [0; 100]" {:score score})))
     (->Relation article-1 article-2 score)))
