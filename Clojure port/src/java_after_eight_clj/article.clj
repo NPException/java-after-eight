@@ -34,10 +34,6 @@
 
 ;; below here -> .article.Tag
 
-(defn ^:private create-tag
-  [text]
-  (util/assert-not-empty text "Tags can't have en empty text."))
-
 (defn ^:private create-tags
   "Creates a set of tags from the given text"
   [tags-text]
@@ -46,8 +42,7 @@
                      (string/split #","))]
     (->> raw-tags
          (map util/strip)
-         (filter #(not (empty? %)))
-         (map create-tag)
+         (filter seq)
          set)))
 
 
