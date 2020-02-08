@@ -58,7 +58,7 @@
   ;; I don't know what the best equivalent to using ServiceLoader
   ;; would be in Clojure. That's beyond my experience level...
   ;; So I'll do this instead.
-  (->> '[java-after-eight-clj.genealogists.clojure.silly-genealogist/silly-service
+  (->> '[#_java-after-eight-clj.genealogists.clojure.silly-genealogist/silly-service
          java-after-eight-clj.genealogists.clojure.tag-genealogist/tag-service]
        (mapv requiring-resolve)
        (map deref)
