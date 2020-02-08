@@ -160,7 +160,9 @@
     (bench "   Java" 50
            (org.codefx.java_after_eight.Main/main java-args))
     (bench "Clojure" 50
-           (clj-main clj-args))))
+           (clj-main clj-args)))
+  (shutdown-agents))
+
 
 (comment
   (-main "articles" "recommendations.json" "clj-recommendations.edn")

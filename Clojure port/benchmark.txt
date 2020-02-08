@@ -28,3 +28,6 @@ Clojure - avg: 128 ms
 
 > use 'group-by' with 'juxt' to make the code much more clear (but sacrifice a few milliseconds for it)
 Clojure - avg: 136 ms
+
+> run from fully AOT compiled uberjar
+Clojure - avg: 122 ms
