@@ -140,13 +140,13 @@
   (clj-main ["articles" "recommendations.json"]))
 
 
-(defmacro bench [name & body]
+(defmacro bench [name repetitions & body]
   `(let [time# (volatile! 0)]
-     (dotimes [n# 10]
+     (dotimes [n# ~repetitions]
        (let [start# (System/currentTimeMillis)]
          ~@body
          (vswap! time# + (- (System/currentTimeMillis) start#))))
-     (println ~name "- avg:" (quot @time# 10) "ms")))
+     (println ~name "- avg:" (quot @time# ~repetitions) "ms")))
 
 
 (defn -main
@@ -155,9 +155,15 @@
       clj-output-file]]
   (let [java-args (into-array [articles-file java-output-file])
         clj-args [articles-file (or clj-output-file java-output-file)]]
-    (bench "   Java"
+
+    (bench "   Warmup Java" 10
            (org.codefx.java_after_eight.Main/main java-args))
-    (bench "Clojure"
+    (bench "Warmup Clojure" 10
+           (clj-main clj-args))
+
+    (bench "   Java" 50
+           (org.codefx.java_after_eight.Main/main java-args))
+    (bench "Clojure" 50
            (clj-main clj-args))))
 
 (comment
