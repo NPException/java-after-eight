@@ -19,19 +19,21 @@ public class Recommender {
 			throw new IllegalArgumentException(
 					"Number of recommendations per article must be greater zero: " + perArticle);
 
-		Comparator<Relation> byArticleThenByDecreasingScore =
-				comparing((Relation relation) -> relation.article1().slug())
-						.thenComparing(Relation::score)
-						.reversed();
-		Map<Article, List<Relation>> byArticle = relations
-				.sorted(byArticleThenByDecreasingScore)
-				.collect(groupingBy(Relation::article1));
+		Comparator<Relation> byDecreasingScoreThenByArticle =
+				comparing(Relation::score)
+						.reversed()
+						.thenComparing((Relation relation) -> relation.article2().title().text());
+
+		Map<Article, List<Relation>> byArticle = relations.collect(groupingBy(Relation::article1));
 		return byArticle
 				.entrySet().stream()
 				.map(articleWithRelations -> Recommendation.from(
 						articleWithRelations.getKey(),
-						articleWithRelations.getValue().stream().map(Relation::article2),
-						perArticle));
+						articleWithRelations.getValue().stream()
+								.sorted(byDecreasingScoreThenByArticle)
+								.map(Relation::article2),
+						perArticle))
+				.sorted(comparing(recommendation -> recommendation.article().title().text()));
 
 	}
 

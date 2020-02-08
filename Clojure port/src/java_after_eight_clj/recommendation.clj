@@ -1,5 +1,6 @@
 (ns java-after-eight-clj.recommendation
-  (:require [java-after-eight-clj.util :as util]))
+  (:require [java-after-eight-clj.util :as util])
+  (:import [java.util Comparator]))
 
 
 (defrecord Recommendation [article recommendations])
@@ -11,6 +12,12 @@
     (take per-article (util/assert-not-nil sorted-recommendations))))
 
 
+(def ^:private by-score-then-title
+  (-> (Comparator/comparing (util/jFunction :score))
+      .reversed
+      (.thenComparing (util/jFunction #(-> % :article-2 :title)))))
+
+
 (defn recommend
   [per-article relations]
   (when (< per-article 1)
@@ -19,15 +26,14 @@
         "Number of recommendations per article must be greater zero"
         {:relations relations
          :num       per-article})))
-
   (->> relations
-       (sort-by (juxt #(-> % :article-1 :slug)
-                      :score)
-                util/reverse-comparator)
        (group-by :article-1)
+       (sort-by #(-> % key :title))
        (mapv (fn [[article relations]]
                (create-recommendation
                  article
-                 (map :article-2 relations)
-                 #_(map #(assoc (:article-2 %) :score (:score %)) relations)
+                 (->> relations
+                      (sort by-score-then-title)
+                      (map :article-2)
+                      #_(map #(assoc (:article-2 %) :score (:score %))))
                  per-article)))))

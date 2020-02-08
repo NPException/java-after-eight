@@ -1,7 +1,8 @@
 (ns java-after-eight-clj.util
   (:require [clojure.string :as string]
             [clojure.stacktrace :as st])
-  (:import [java.lang.management ManagementFactory]))
+  (:import [java.lang.management ManagementFactory]
+           [java.util.function Function]))
 
 
 (defn remove-outer-quotation-marks
@@ -135,3 +136,8 @@
     ;; second operator takes precedence
     :else
     `(infix ~(concat [a op] [(conj args b)]))))
+
+(defn jFunction
+  ^Function [f]
+  (reify Function
+    (apply [_ x] (f x))))
