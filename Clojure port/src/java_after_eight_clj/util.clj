@@ -135,11 +135,3 @@
     ;; second operator takes precedence
     :else
     `(infix ~(concat [a op] [(conj args b)]))))
-
-
-(defn update!
-  "Like `update`, but for transient maps"
-  ([m k f]
-   (assoc! m k (f (get m k))))
-  ([m k f x]
-   (assoc! m k (f (get m k) x))))

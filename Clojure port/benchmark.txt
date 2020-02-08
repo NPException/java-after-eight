@@ -25,3 +25,6 @@ Clojure - avg: 137 ms
 
 > use Java's Files/readAllLines to ingest article files (drawback: `parse-article-from-file` is now limited to File instances)
 Clojure - avg: 128 ms
+
+> use 'group-by' with 'juxt' to make the code much more clear (but sacrifice a few milliseconds for it)
+Clojure - avg: 136 ms

@@ -83,21 +83,11 @@
        (pmap #(apply infer-typed-relation %))))
 
 
-(defn ^:private aggregate-typed-relations
-  [typed-relations weights]
-  (->> typed-relations
-       (reduce
-         (fn [result relation]
-           (util/update! result [(:article-1 relation) (:article-2 relation)] conj relation))
-         (transient {}))
-       persistent!
-       (mapv #(aggregate-relation (val %) weights))))
-
-
 (defn infer-relations
   [articles genealogists weights]
   (util/assert-not-empty articles)
   (util/assert-not-empty genealogists)
   (util/assert-not-nil weights)
-  (-> (infer-typed-relations articles genealogists)
-      (aggregate-typed-relations weights)))
+  (->> (infer-typed-relations articles genealogists)
+       (group-by (juxt :article-1 :article-2))
+       (mapv #(aggregate-relation (val %) weights))))
