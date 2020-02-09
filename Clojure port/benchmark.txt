@@ -34,3 +34,8 @@ Clojure - avg: 122 ms
 
 ==> execute uberjar from commandline
 ~1530ms
+
+
+Took me way too long to realize: I had the silly genealogist active in my clojure runs...
+> only use tag genealogist like the java version does
+Clojure - avg: 74 ms
