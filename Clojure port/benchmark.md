@@ -35,14 +35,14 @@ Took me way too long to realize: I had the silly genealogist active in my clojur
 * only use tag genealogist like the java version does  
 `Clojure - avg: 74 ms`
 
----
-
-* execute uberjar from commandline: ~ 1530 ms
 
 ---
 
 * final measurement with Java 14  
 `Java - avg: 42 ms`  
-`Clojure - avg: 73 ms`  
+`Clojure - avg: 73 ms`
 
-* execute uberjar from commandline: ~ 1050 ms
+---
+
+* execute uberjar with Java 8: ~ 1530 ms
+* execute uberjar with Java 14: ~ 1050 ms
